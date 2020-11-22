@@ -1,6 +1,7 @@
 import os
 import json
 import shutil
+from bs4 import BeautifulSoup
 import requests
 import configparser as cp
 
@@ -37,6 +38,7 @@ CHAMPION_KEYS = ["name", "title", "lore", "allytips",
 ITEM_KEYS = ["depth", "description", "from", "into",
              "gold", "name", "plaintext", "stats", "tags"]
 
+
 def clean_files(folder):
     for f in os.listdir(folder):
         fp = os.path.join(folder, f)
@@ -57,6 +59,12 @@ def initialize_repository():
     clean_files(root_fullpath)
 
 
+def get_data(endpoint):
+    res = requests.get(endpoint).json()["data"]
+    res = remove_html(res)
+    return res
+
+
 def persist_data(data, filename):
     fullpath = os.path.join(FILES_DIRECTORY, filename)
     with open(fullpath, 'w') as f:
@@ -72,8 +80,20 @@ def remove_keys(obj, rubbish):
     return obj
 
 
+def remove_html(thing):
+    if isinstance(thing, str):
+        soup = BeautifulSoup(thing, "html.parser")
+        return soup.get_text()
+    elif isinstance(thing, dict):
+        res = {k: remove_html(v) for k,v in thing.items()}
+        return res
+    elif isinstance(thing, list):
+        res = [remove_html(i) for i in thing]
+        return res
+
+
 def get_champions():
-    data = requests.get(CHAMPIONS_EP).json()["data"]
+    data = get_data(CHAMPIONS_EP)
     champions = {}
     for ckey, entry in data.items():
         champion = {}
@@ -86,7 +106,7 @@ def get_champions():
 
 def get_champion(champion_id):
     endpoint = f"{CHAMPION_EP}/{champion_id}.json"
-    data = requests.get(endpoint).json()["data"][champion_id]
+    data = get_data(endpoint)[champion_id]
     champion = {}
     for key in CHAMPION_KEYS:
         champion[key] = data[key]
@@ -96,7 +116,7 @@ def get_champion(champion_id):
 
 
 def get_items():
-    data = requests.get(ITEMS_EP).json()["data"]
+    data = get_data(ITEMS_EP)
     items = {}
     for ikey, entry in data.items():
         item = {}
