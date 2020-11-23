@@ -1,5 +1,5 @@
 import os
-import operations as ops
+import cmd.operations as ops
 import configparser as cp
 
 cfg = cp.ConfigParser()
@@ -9,7 +9,9 @@ FILES_DIRECTORY = cfg["DEFAULT"]["files_directory"]
 
 def item_command(args):
     if len(args) < 1:
-        return "Please specify an item as follows, you degenerate buffoon:\n `^item [item_name]`"
+        result = "Please specify an item as follows, you degenerate buffoon:\n"
+        result += "# ^item [name]"
+        return ops.fix_output(result)
 
     filepath = os.path.join(FILES_DIRECTORY, "items.json")
     data = ops.get_data(filepath)
@@ -30,14 +32,9 @@ def item_command(args):
     total_gold = str(item['gold']['total'])
     base_gold = str(item['gold']['base'])
 
-    result = "```md\n"
-    result += f"# {item['name']} < {total_gold}({base_gold}) >\n"
+    result = f"# {item['name']} < {total_gold}({base_gold}) >\n"
     result += f"> {item['tags']}\n"
     result += f"*{item['description'].strip()}*\n\n"
     result += f"* From: {from_items}\n"
     result += f"* Into: {into_items}\n"
-    result+="```"
-    return result
-
-
-print("hey")
+    return ops.fix_output(result)

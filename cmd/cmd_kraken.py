@@ -1,3 +1,6 @@
+import cmd.operations as ops
+
 
 def kraken_command(args):
-    return "Get that **disgusting** item out of my sight!"
+    message= "Get that **disgusting** item out of my sight!"
+    return ops.fix_output(message) 

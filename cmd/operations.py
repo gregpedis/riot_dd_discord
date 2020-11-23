@@ -1,5 +1,5 @@
 import configparser as cp
-import levenshtein as lstein
+import cmd.levenshtein as lstein
 import sys
 import os
 import json
@@ -26,7 +26,16 @@ def has_intersection(a, b):
     set2 = set([x.lower() for x in b])
     if set1 & set2:
         return True
-    else: 
+    else:
+        return False
+
+
+def is_subset(small, big):
+    sset = set([x.lower() for x in small])
+    bset = set([x.lower() for x in big])
+    if sset.issubset(bset):
+        return True
+    else:
         return False
 
 
@@ -45,3 +54,10 @@ def parse_input(message):
         args = msg[1:]
         return (cmd, args)
     return ("", [])
+
+
+def fix_output(message):
+    result = "```md\n"
+    result += message
+    result += "```"
+    return result

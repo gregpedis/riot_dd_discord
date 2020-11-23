@@ -1,3 +1,4 @@
 
-def champion_command():
-    pass
+def champion_command(args):
+    return ""
+    

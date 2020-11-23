@@ -1,16 +1,10 @@
 import configparser as cp
 import sys
 import os
-import cmd.cmd_champion as cmd_champion
-import cmd.cmd_champions
-import cmd.cmd_help
-import cmd.cmd_item
-import cmd.cmd_items
-import cmd.cmd_kraken
-import cmd.cmd_spell
-import cmd.cmd_tags
+import cmd
 
-this = sys.modules[__name__]
+this= sys.modules[__name__]
+cmd_module = sys.modules["cmd"]
 
 cfg = cp.ConfigParser()
 cfg.read("config.ini")
@@ -29,15 +23,6 @@ def parse_input(message):
 
 def execute_command(message):
     cmd, args = parse_input(message)
-    command = getattr(this, f"{cmd}_command")
+    command = getattr(cmd_module, f"{cmd}_command")
     result = command(args)
     return result
-
-
-def champion_command(args):
-    cmd_champion.champion_command(args)
-    return ""
-
-
-def spell_command(args):
-    pass
