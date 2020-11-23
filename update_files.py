@@ -99,6 +99,7 @@ def get_champion_tags(champions):
     distinct_tags = set([t for ts in tags for t in ts])
     persist_data({"tags": list(distinct_tags)},"champion_tags.json")
 
+
 def get_champions():
     data = get_data(CHAMPIONS_EP)
     champions = {}

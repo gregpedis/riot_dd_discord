@@ -6,6 +6,7 @@ cfg = cp.ConfigParser()
 cfg.read("config.ini")
 
 FILES_DIRECTORY = cfg["DEFAULT"]["files_directory"]
+CHAMPIONS_DIRECTORY = os.path.join(FILES_DIRECTORY, "champions")
 
 
 def champions_command(args):
@@ -14,12 +15,10 @@ def champions_command(args):
         result += "# ^champions [tag1 tag2 tag3...]"
         return ops.fix_output(result)
 
-    champions_dir = os.path.join(FILES_DIRECTORY, "champions")
     filepath = os.path.join(FILES_DIRECTORY, "champions.json")
-
     names = [k for k, v in ops.get_data(filepath).items()]
 
-    champions = {name: ops.get_data(os.path.join(champions_dir, f"{name}.json"))
+    champions = {name: ops.get_data(os.path.join(CHAMPIONS_DIRECTORY, f"{name}.json"))
                  for name in names}
 
     entries = []
