@@ -83,14 +83,21 @@ def remove_keys(obj, rubbish):
 def remove_html(thing):
     if isinstance(thing, str):
         soup = BeautifulSoup(thing, "html.parser")
-        return soup.get_text()
+        return soup.get_text(separator=" ")
     elif isinstance(thing, dict):
         res = {k: remove_html(v) for k,v in thing.items()}
         return res
     elif isinstance(thing, list):
         res = [remove_html(i) for i in thing]
         return res
+    else:
+        return thing
 
+
+def get_champion_tags(champions):
+    tags = [x["tags"] for x in champions.values()]
+    distinct_tags = set([t for ts in tags for t in ts])
+    persist_data({"tags": list(distinct_tags)},"champion_tags.json")
 
 def get_champions():
     data = get_data(CHAMPIONS_EP)
@@ -101,6 +108,7 @@ def get_champions():
             champion[key] = entry.get(key, None)
         champions[ckey] = champion
     persist_data(champions, "champions.json")
+    get_champion_tags(data)
     return data.keys()
 
 
@@ -115,6 +123,12 @@ def get_champion(champion_id):
     persist_data(champion, relative_path)
 
 
+def get_item_tags(items):
+    tags = [x["tags"] for x in items.values()]
+    distinct_tags = set([t for ts in tags for t in ts])
+    persist_data({"tags": list(distinct_tags)},"item_tags.json")
+
+
 def get_items():
     data = get_data(ITEMS_EP)
     items = {}
@@ -124,6 +138,7 @@ def get_items():
             item[key] = entry.get(key, None)
         items[ikey] = item
     persist_data(items, "items.json")
+    get_item_tags(items)
 
 
 def main():
