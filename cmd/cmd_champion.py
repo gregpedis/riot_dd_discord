@@ -28,12 +28,12 @@ def champion_command(args):
     general_data += f"## {champion['title']}\n"
     general_data += f"> {champion['tags']}\n\n"
 
-    general_data += f"< Spells >\n"
+    general_data += f"<Spells>\n"
     for spell in champion["spells"]:
         general_data += f"* {spell['name']}\n"
     general_data += "\n"
 
-    general_data += f"< Stats >\n"
+    general_data += f"<Stats>\n"
     for k, v in champion["stats"].items():
         general_data += f"* {k.ljust(25)} {'->'.ljust(5)} {str(v)}\n"
     general_data += "\n"
@@ -41,15 +41,15 @@ def champion_command(args):
     results.append(ops.fix_output(general_data))
 
     random_stuff = f"# {champion['name']}\n"
-    random_stuff += f"< Lore >\n"
+    random_stuff += f"<Lore>\n"
     random_stuff += f"* {champion['lore']}\n\n"
 
-    random_stuff += "< Ally Tips >\n"
+    random_stuff += "<Ally Tips>\n"
     for tip in champion['allytips']:
         random_stuff += f"* {tip}\n"
     random_stuff += "\n"
 
-    random_stuff += "< Enemy Tips >\n"
+    random_stuff += "<Enemy Tips>\n"
     for tip in champion['enemytips']:
         random_stuff += f"* {tip}\n"
     random_stuff += "\n"
